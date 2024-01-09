@@ -43,7 +43,7 @@ function startWebcam() {
 }
 
 function loadLabeledImages() {
-  const labels = ["Data", "Milana", "Obama"];
+  const labels = ["Einstein", "Milana", "Obama"];
   return Promise.all(
     labels.map(async (label) => {
       const descriptions = [];
@@ -57,6 +57,7 @@ function loadLabeledImages() {
     })
   );
 }
+const detectedPeople = new Set();
 
 function startFaceDetection() {
   console.log("startFaceDetection");
@@ -85,14 +86,28 @@ function startFaceDetection() {
         return faceMatcher.findBestMatch(d.descriptor);
       });
 
+      
       // Maak de canvas leeg
       canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+
+      const attendanceMessage = document.getElementById("attendanceMessage"); 
 
       // Teken het detecteren gezicht
       results.forEach((result, index) => {
         const box = resizeDetections[index].detection.box;
         const drawBox = new faceapi.draw.DrawBox(box, { label: result });
         drawBox.draw(canvas);
+
+        if (result._distance < 50) {
+          // Display the label with the attendance message
+          const label = result.label;
+          if (!detectedPeople.has(label)) {
+          const text = `${label} is attending the class`;
+          // Display the text near the detected face
+          attendanceMessage.innerHTML += `<p>${text}</p>`;
+          detectedPeople.add(label);
+        }
+      }
       });
     }, 100);
   });
