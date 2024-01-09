@@ -2,8 +2,7 @@ const video = document.getElementById("video");
 
 // Laden van de modellen
 Promise.all([
-    faceapi.nets.ssdMobilenetv1.loadFromUri("/weights"),
-    faceapi.nets.faceRecognitionNet.loadFromUri("/weights"),
+    faceapi.nets.tinyFaceDetector.loadFromUri("/weights"),
     faceapi.nets.faceLandmark68Net.loadFromUri("/weights"),
   ]).then(startWebcam);
   
@@ -22,3 +21,22 @@ function startWebcam() {
         console.error(error);
       });
   }
+
+  video.addEventListener("play", () => {
+    const canvas = faceapi.createCanvasFromMedia(video);
+    document.body.append(canvas);
+
+    // Speel de code af elke 100ms
+    setInterval(async () =>{
+      try {
+
+      const detections = await faceapi
+      .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+      .withFaceLandmarks()
+      .withFaceDescriptors();
+
+    } catch (error) {
+      console.error("Error during face detection:", error);
+    }
+  }, 100);
+  });
