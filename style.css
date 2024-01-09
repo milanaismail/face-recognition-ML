@@ -5,6 +5,13 @@ html, body{
 }
 
 body{
+    background-image: url(/images/background.jpeg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-repeat: round;
+}
+
+body{
     display: flex;
     justify-content: center;
     align-items: center;}
@@ -90,12 +97,13 @@ video {
     border-top-left-radius: 16px;
     border-bottom-left-radius: 16px;
     padding: 6px 32px;
+    text-align: right;
 }
 
 .video-item.canvas-container {
-    background-color: #008000;
-    position: relative;
-  }
+  position: relative;
+  border: 6px solid #008000;
+}
 
 video,
 canvas {

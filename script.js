@@ -96,7 +96,8 @@ function startFaceDetection() {
       // Teken het detecteren gezicht
       results.forEach((result, index) => {
         const box = resizeDetections[index].detection.box;
-        const drawBox = new faceapi.draw.DrawBox(box, { label: result });
+        
+        const drawBox = new faceapi.draw.DrawBox(box, { label: result, fontsize: 50, boxColor: 'green', drawLabelOptions: { fontSize: 40, textColor: 'green' } });
         drawBox.draw(canvas);
 
         if (result._distance < 50) {
@@ -117,8 +118,13 @@ function startFaceDetection() {
 function stopFaceDetection() {
   console.log("stopFaceDetection");
   clearInterval(faceDetectionInterval);
-  const canvas = document.querySelector('canvas');
+  const canvas = document.querySelector('.video-item.canvas-container canvas');
   if (canvas) {
-    document.body.removeChild(canvas);
+    canvas.parentNode.removeChild(canvas);
   }
+  const attendanceMessage = document.getElementById("attendanceMessage");
+  const stopMessage = document.createElement('p');
+  stopMessage.textContent = 'Detecting complete';
+  stopMessage.style.fontWeight = 'bold';  
+  attendanceMessage.appendChild(stopMessage);
 }
