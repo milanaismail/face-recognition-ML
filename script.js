@@ -67,8 +67,9 @@ function startFaceDetection() {
     const faceMatcher = new faceapi.FaceMatcher(descriptors);
     
     const canvas = faceapi.createCanvasFromMedia(video);
-    document.body.append(canvas);
+    const canvasContainer = document.querySelector(".video-item.canvas-container");
 
+    canvasContainer.appendChild(canvas);
     const displaySize = { width: video.videoWidth, height: video.videoHeight };
     faceapi.matchDimensions(canvas, displaySize);
 
