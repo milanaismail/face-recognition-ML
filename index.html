@@ -9,8 +9,24 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="attendanceMessage"></div>
-    <video id="video" width="600" height="450" autoplay></video>
-    <button id="startButton">Start Detecting</button>
+    <div class="zoom-meeting">
+        <div class="zoom-call">
+            <div class="video-grid">
+                <div class="video-item">
+                </div>
+                <div class="video-item">
+                </div>
+                <div class="video-item">
+                </div>
+                <div class="video-item canvas-container">
+                    <video id="video" width="400" height="auto" autoplay></video>
+                </div>
+            </div>
+        </div>
+        <div class="zoom-chat">
+            <button id="startButton">Start Detecting</button>
+            <div id="attendanceMessage"></div>
+        </div>
+    </div>
 </body>
 </html>
