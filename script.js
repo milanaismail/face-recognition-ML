@@ -4,6 +4,7 @@ const video = document.getElementById("video");
 Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri("/weights"),
     faceapi.nets.faceLandmark68Net.loadFromUri("/weights"),
+    faceapi.nets.faceRecognitionNet.loadFromUri("/weights"), 
   ]).then(startWebcam);
   
 
@@ -35,6 +36,12 @@ function startWebcam() {
       .withFaceLandmarks()
       .withFaceDescriptors();
 
+      // Maak de canvas leeg
+      canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+      // Teken het detecteren gezicht
+      faceapi.draw.drawDetections(canvas, detections);
+      faceapi.draw.drawFaceLandmarks(canvas, detections);
+      
     } catch (error) {
       console.error("Error during face detection:", error);
     }
