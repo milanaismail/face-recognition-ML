@@ -2,10 +2,10 @@ const video = document.getElementById("video");
 
 // Laden van de modellen
 Promise.all([
-    faceapi.nets.tinyFaceDetector.loadFromUri("/weights"),
+    faceapi.nets.ssdMobilenetv1.loadFromUri("/weights"), 
     faceapi.nets.faceLandmark68Net.loadFromUri("/weights"),
     faceapi.nets.faceRecognitionNet.loadFromUri("/weights"), 
-  ]).then(startWebcam);
+  ]).then(startWebcam).then(detectFaces);
   
 
 //Toegang krijgen tot camera
@@ -23,7 +23,67 @@ function startWebcam() {
       });
   }
 
-  video.addEventListener("play", () => {
+  //laden van fotos
+  function loadLabeledImages() {
+    const labels = ["Data", "Milana", "Obama"];
+    return Promise.all(
+      labels.map(async (label) => {
+        const descriptions = [];
+        for (let i = 1; i <= 2; i++) {
+          // door alle fotos gaan
+          const img = await faceapi.fetchImage(`./labels/${label}/${i}.jpeg`);
+          const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+          descriptions.push(detections.descriptor);
+        }
+  
+        return new faceapi.LabeledFaceDescriptors(label, descriptions);
+      })
+    );
+  }
+
+  async function detectFaces() {
+    const labeledFaceDescriptors = await loadLabeledImages();
+    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
+
+    video.addEventListener("play", async () => {
+      console.log("play")
+      const canvas = faceapi.createCanvasFromMedia(video);
+      document.body.append(canvas);
+
+      canvas.width = video.width;
+      canvas.height = video.height;
+
+      const displaySize = { width: video.width, height: video.height };
+      faceapi.matchDimensions(canvas, displaySize);
+
+      // Speel de code af elke 100ms
+      setInterval(async () => {
+        const detections = await faceapi
+          .detectAllFaces(video)
+          .withFaceLandmarks()
+          .withFaceDescriptors();
+
+        const resizeDetections = faceapi.resizeResults(detections, displaySize);  
+
+        // Maak de canvas leeg
+        canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+        
+        //Map de detection en vind de beste match
+        const results = resizeDetections.map((d) => {
+          return faceMatcher.findBestMatch(d.descriptor);
+        });
+
+      // Teken het detecteren gezicht
+      results.forEach((result, index) => {
+        const box = resizeDetections[index].detection.box;
+        const drawBox = new faceapi.draw.DrawBox(box, { label: result.toString()});
+        drawBox.draw(canvas);
+      });
+    }, 100);
+  });
+  }
+
+ /* video.addEventListener("play", () => {
     const canvas = faceapi.createCanvasFromMedia(video);
     document.body.append(canvas);
     faceapi.matchDimensions(canvas, {height: video.height, width: video.width});
@@ -49,4 +109,4 @@ function startWebcam() {
       console.error("Error during face detection:", error);
     }
   }, 100);
-  });
+  });*/
