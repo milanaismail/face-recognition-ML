@@ -1,6 +1,7 @@
 html, body{
     height: 100%;
     margin: 0 auto;
+    font-family: 'roboto', sans-serif;
 }
 
 body{
@@ -60,12 +61,13 @@ video {
     display: block;
     width: 200px;
     height: 50px;
-    background-color: #000;
+    background-color: blueviolet;
     color: #fff;
     border: none;
     border-radius: 5px;
     font-size: 20px;
     cursor: pointer;
+    margin-top: 20px;
 }
 
 .zoom-chat{
@@ -81,15 +83,11 @@ video {
     align-items: center;
 }
 
-#startButton {
-    display: block;
-    width: 200px;
-    height: 50px;
-    background-color: #000;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 20px;
-    cursor: pointer;
-    margin-top: 10px; /* Add margin to separate button from the attendanceMessage */
+
+#attendanceMessage{
+    background-color:lightskyblue;
+    border-top-right-radius: 16px;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+    padding: 6px 32px;
 }
