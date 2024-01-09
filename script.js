@@ -34,8 +34,8 @@ function startWebcam() {
       const detections = await faceapi
       .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks()
-      .withFaceDescriptors();
 
+      console.log(detections)
       // Maak de canvas leeg
       canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
       // Teken het detecteren gezicht
