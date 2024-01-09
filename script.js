@@ -26,6 +26,7 @@ function startWebcam() {
   video.addEventListener("play", () => {
     const canvas = faceapi.createCanvasFromMedia(video);
     document.body.append(canvas);
+    faceapi.matchDimensions(canvas, {height: video.height, width: video.width});
 
     // Speel de code af elke 100ms
     setInterval(async () =>{
@@ -35,12 +36,14 @@ function startWebcam() {
       .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks()
 
+      const resizeDetections = faceapi.resizeResults(detections, {height: video.height, width: video.width})
+
       console.log(detections)
       // Maak de canvas leeg
       canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
       // Teken het detecteren gezicht
-      faceapi.draw.drawDetections(canvas, detections);
-      faceapi.draw.drawFaceLandmarks(canvas, detections);
+      faceapi.draw.drawDetections(canvas, resizeDetections);
+      faceapi.draw.drawFaceLandmarks(canvas, resizeDetections);
       
     } catch (error) {
       console.error("Error during face detection:", error);
