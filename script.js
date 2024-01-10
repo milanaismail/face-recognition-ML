@@ -43,7 +43,7 @@ function startWebcam() {
 }
 
 function loadLabeledImages() {
-  const labels = ["Einstein", "Milana", "Obama"];
+  const labels = ["Einstein", "Milana", "Obama", "Kim", "Elon"];
   return Promise.all(
     labels.map(async (label) => {
       const descriptions = [];
